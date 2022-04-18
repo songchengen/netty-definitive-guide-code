@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package np;
+
+option java_package = "com.crush.protobuf.pojo";
+option java_outer_classname = "SubscribeRespProto";
+
+message SubscribeResp {
+    required int32 subReqId = 1;
+    required int32 respCode = 2;
+    optional string desc = 3;
+}
