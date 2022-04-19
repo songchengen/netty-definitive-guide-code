@@ -12,6 +12,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.stream.ChunkedWriteHandler;
 
 /**
@@ -36,6 +38,7 @@ public class HttpFileServer {
       bootstrap.group(boss, worker)
           .channel(NioServerSocketChannel.class)
           .option(ChannelOption.SO_BACKLOG, 100)
+          .handler(new LoggingHandler(LogLevel.DEBUG))
           .childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             protected void initChannel(SocketChannel ch) throws Exception {
@@ -49,8 +52,8 @@ public class HttpFileServer {
             }
           });
 
-      ChannelFuture f = bootstrap.bind(port).sync();
-      System.out.println("HTTP文件目录服务器启动，网址是 : " + LOCAL_HOST + ":"
+      ChannelFuture f = bootstrap.bind(LOCAL_HOST, port).sync();
+      System.out.println("HTTP文件目录服务器启动，网址是 : http://" + LOCAL_HOST + ":"
           + port + url);
 
       f.channel().closeFuture().sync();
