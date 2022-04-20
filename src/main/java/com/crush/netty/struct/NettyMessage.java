@@ -1,4 +1,6 @@
-package com.crush.netty.handler.codec;
+package com.crush.netty.struct;
+
+import com.crush.netty.struct.Header;
 
 /**
  * Copyright (c) 2021, songchengen. All rights reserved.

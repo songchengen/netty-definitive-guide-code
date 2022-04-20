@@ -1,4 +1,4 @@
-package com.crush.netty.handler.codec;
+package com.crush.netty.struct;
 
 import java.util.HashMap;
 import java.util.Map;

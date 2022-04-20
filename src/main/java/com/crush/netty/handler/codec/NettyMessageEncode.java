@@ -1,5 +1,6 @@
 package com.crush.netty.handler.codec;
 
+import com.crush.netty.struct.NettyMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -17,7 +18,7 @@ import java.util.Map;
  * @date 2022/4/19
  * @version 0.0.1
  */
-public class NettyMessageEncode extends MessageToMessageEncoder<NettyMessage> {
+public class NettyMessageEncode extends MessageToByteEncoder<NettyMessage> {
 
   private final MarshallingEncode marshallingEncode;
 
@@ -26,11 +27,10 @@ public class NettyMessageEncode extends MessageToMessageEncoder<NettyMessage> {
   }
 
   @Override
-  protected void encode(ChannelHandlerContext ctx, NettyMessage msg, List<Object> out) throws Exception {
+  protected void encode(ChannelHandlerContext ctx, NettyMessage msg, ByteBuf sendBuf) throws Exception {
     if (msg == null || msg.getHeader() == null) {
       throw  new Exception("the encode message is null");
     }
-    ByteBuf sendBuf = Unpooled.buffer();
     // 1. 消息的校验码
     sendBuf.writeInt(msg.getHeader().getCrcCode());
     // 2. 消息的长度
@@ -67,8 +67,7 @@ public class NettyMessageEncode extends MessageToMessageEncoder<NettyMessage> {
       sendBuf.writeInt(0);
     }
     int length = sendBuf.readableBytes();
-    sendBuf.setInt(4, length);
+    sendBuf.setInt(4, length - 8);
 
-    out.add(sendBuf);
   }
 }
